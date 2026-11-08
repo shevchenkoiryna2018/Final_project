@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Мої рослини | PlantCare{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+    <h1 class="text-success mb-0">Мої рослини</h1>
+
+    <a href="{% url 'plants:plant_create' %}" class="btn btn-success">
+        + Додати рослину
+    </a>
+</div>
+
+{% if plants %}
+
+    <div class="row g-4">
+        {% for plant in plants %}
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+
+                    <div class="card-body">
+                        <h2 class="h5 card-title text-success">
+                            {{ plant.name }}
+                        </h2>
+
+                        <p class="card-text">
+                            <strong>Вид:</strong>
+                            {{ plant.species }}
+                        </p>
+
+                        <p class="card-text">
+                            <strong>Інтервал поливу:</strong>
+                            {{ plant.watering_interval }} днів
+                        </p>
+
+                        <p class="card-text">
+                            <strong>Останній полив:</strong>
+                            {{ plant.last_watered|date:"d.m.Y"|default:"Не вказано" }}
+                        </p>
+
+                        {% if plant.location %}
+                            <p class="card-text">
+                                <strong>Розташування:</strong>
+                                {{ plant.location }}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-footer bg-white d-flex gap-2">
+                        <a href="{% url 'plants:plant_update' plant.id %}"
+                            class="btn btn-outline-success btn-sm">
+                            Редагувати
+                        </a>
+
+                        <a href="{% url 'plants:plant_delete' plant.id %}"
+                            class="btn btn-outline-danger btn-sm">
+                            Видалити
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+{% else %}
+
+    <div class="text-center py-5">
+        <h2 class="h4 text-muted mb-3">
+            У вашій колекції поки немає рослин
+        </h2>
+
+        <p class="text-muted mb-4">
+            Додайте свою першу рослину, щоб почати користуватися PlantCare.
+        </p>
+
+        <a href="{% url 'plants:plant_create' %}" class="btn btn-success">
+            Додати першу рослину
+        </a>
+    </div>
+
+{% endif %}
+
+{% endblock %}
+

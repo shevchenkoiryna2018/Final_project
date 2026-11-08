@@ -26,7 +26,7 @@ def register(request):
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'plants/index.html')
 
 
 @login_required
@@ -35,7 +35,7 @@ def dashboard(request):
 
     context = {'plants': plants,}
 
-    return render(request, 'dashboard.html', context)
+    return render(request, 'plants/dashboard.html', context)
 
 
 @login_required
@@ -54,5 +54,32 @@ def plant_create(request):
 
     return render(request, 'plants/plant_form.html', {'form': form})
 
+
+@login_required
+def plant_update(request, id):
+    plant = get_object_or_404(Plant, id=id, owner=request.user)
+
+    if request.method == 'POST':
+        form = PlantForm(request.POST, instance=plant)
+
+        if form.is_valid():
+            form.save()
+            return redirect('plants:dashboard')
+
+    else:
+        form = PlantForm(instance=plant)
+
+    return render(request, 'plants/plant_form.html', {'form': form})
+
+
+@login_required
+def plant_delete(request, id):
+    plant = get_object_or_404(Plant, id=id, owner=request.user)
+
+    if request.method == 'POST':
+        plant.delete()
+        return redirect('plants:dashboard')
+
+    return render(request, 'plants/plant_confirm_delete.html', {'plant': plant})
 
 

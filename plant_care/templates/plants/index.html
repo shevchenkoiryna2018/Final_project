@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Головна | PlantCare{% endblock %}
+
+{% block content %}
+
+<section class="text-center py-5">
+    <h1 class="display-4 fw-bold text-success mb-4">
+        🌿 Ласкаво просимо до PlantCare!
+    </h1>
+
+    <p class="lead text-muted mb-4">
+        Турбота про рослини стає простішою!
+        Створюйте власну колекцію, плануйте догляд
+        та зберігайте історію турботи про свої рослини.
+    </p>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'plants:dashboard' %}" class="btn btn-success btn-lg">
+            Мої рослини
+        </a>
+    {% else %}
+        <a href="{% url 'plants:register' %}" class="btn btn-success btn-lg">
+            Почати користуватися
+        </a>
+
+        <a href="{% url 'plants:login' %}" class="btn btn-outline-success btn-lg ms-2">
+            Увійти
+        </a>
+    {% endif %}
+</section>
+
+<section class="py-4">
+    <h2 class="text-center mb-4">Можливості PlantCare</h2>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <h3 class="h5 card-title text-success">
+                        🪴 Колекція рослин
+                    </h3>
+                    <p class="card-text">
+                        Додавайте свої рослини, зберігайте інформацію
+                        про них та керуйте власною колекцією.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <h3 class="h5 card-title text-success">
+                        📅 Планування догляду
+                    </h3>
+                    <p class="card-text">
+                        Створюйте завдання для поливу, підживлення,
+                        пересадки та інших процедур догляду.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <h3 class="h5 card-title text-success">
+                        📖 Історія догляду
+                    </h3>
+                    <p class="card-text">
+                        Відстежуйте виконані завдання та переглядайте
+                        історію догляду за кожною рослиною.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
