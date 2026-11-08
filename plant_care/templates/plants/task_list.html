@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Мої завдання | PlantCare{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 text-success mb-0">Мої завдання</h1>
+
+    <a href="{% url 'plants:task_create' %}" class="btn btn-success">
+        + Додати завдання
+    </a>
+</div>
+
+{% if tasks %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Рослина</th>
+                    <th>Тип догляду</th>
+                    <th>Дата</th>
+                    <th>Пріоритет</th>
+                    <th>Статус</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.plant.name }}</td>
+                        <td>{{ task.get_task_type_display }}</td>
+                        <td>{{ task.scheduled_date|date:"d.m.Y" }}</td>
+                        <td>{{ task.get_priority_display }}</td>
+                        <td>
+                            {% if task.is_completed %}
+                                <span class="badge bg-success">Виконано</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Очікує виконання</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not task.is_completed %}
+                                <form method="post" action="{% url 'plants:task_complete' task.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        ✓ Виконано
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        У вас поки немає запланованих завдань
+    </div>
+{% endif %}
+
+{% endblock %}

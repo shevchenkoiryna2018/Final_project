@@ -3,8 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 
-from .forms import PlantForm, RegisterForm
+from .forms import PlantForm, RegisterForm, CareTaskForm
 from .models import Plant, CareTask, CareLog
+
+from django.utils import timezone
+from django.db import transaction
+from django.views.decorators.http import require_POST
 
 
 def register(request):
@@ -81,5 +85,51 @@ def plant_delete(request, id):
         return redirect('plants:dashboard')
 
     return render(request, 'plants/plant_confirm_delete.html', {'plant': plant})
+
+
+@login_required
+def task_create(request):
+    if request.method == 'POST':
+        form = CareTaskForm(request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect('plants:dashboard')
+    else:
+        form = CareTaskForm(user=request.user)
+
+    return render(request, 'plants/task_form.html', {'form': form})
+
+
+@login_required
+def task_list(request):
+    tasks = CareTask.objects.filter(plant__owner=request.user).order_by('is_completed', 'scheduled_date', 'priority')
+
+    return render(request, 'plants/task_list.html', {'tasks': tasks})
+
+
+@login_required
+@require_POST
+def task_complete(request, id):
+    task = get_object_or_404(CareTask, id=id, plant__owner=request.user)
+
+    if not task.is_completed:
+        with transaction.atomic():
+            task.is_completed = True
+            task.save()
+
+            CareLog.objects.create(
+                plant=task.plant,
+                task=task,
+                care_type=task.task_type,
+                notes=task.notes,
+            )
+
+            if task.task_type == 'watering':
+                task.plant.last_watered = timezone.localdate()
+                task.plant.save()
+
+    return redirect('plants:task_list')
+
 
 

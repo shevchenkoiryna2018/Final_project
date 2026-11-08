@@ -1,10 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Реєстрація | PlantCare{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+                <h1 class="h3 text-success text-center mb-4">
+                    Створення облікового запису
+                </h1>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <div class="mb-1">
+                                {{ field.label_tag }}
+                            </div>
+
+                            {{ field }}
+
+                            {% if field.help_text %}
+                                <div class="form-text">
+                                    {{ field.help_text }}
+                                </div>
+                            {% endif %}
+
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-success w-100">
+                        Зареєструватися
+                    </button>
+                </form>
+
+                <p class="text-center mt-3 mb-0">
+                    Вже маєте обліковий запис?
+                    <a href="{% url 'plants:login' %}" class="text-success">
+                        Увійти
+                    </a>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+

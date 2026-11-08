@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Вхід | PlantCare{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+                <h1 class="h3 text-success text-center mb-4">
+                    Вхід до PlantCare
+                </h1>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <div class="mb-1">
+                                {{ field.label_tag }}
+                            </div>
+
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <input type="hidden" name="next" value="{{ next }}">
+
+                    <button type="submit" class="btn btn-success w-100">
+                        Увійти
+                    </button>
+                </form>
+
+                <p class="text-center mt-3 mb-0">
+                    Ще не маєте облікового запису?
+                    <a href="{% url 'plants:register' %}" class="text-success">
+                        Зареєструватися
+                    </a>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
