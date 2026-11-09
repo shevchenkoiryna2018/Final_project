@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from datetime import timedelta
+from django.utils import timezone
 
 
 class Plant(models.Model):
@@ -16,6 +18,20 @@ class Plant(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_next_watering_date(self):
+        if self.last_watered:
+            return self.last_watered + timedelta(days=self.watering_interval)
+
+        return None
+
+    def is_watering_overdue(self):
+        next_date = self.get_next_watering_date()
+
+        if next_date:
+            return next_date < timezone.localdate()
+
+        return False
 
     class Meta:
         ordering = ['name']
@@ -47,6 +63,9 @@ class CareTask(models.Model):
 
     def __str__(self):
         return f'{self.get_task_type_display()} - {self.plant.name}'
+
+    def is_overdue(self):
+        return (not self.is_completed and self.scheduled_date < timezone.localdate())
 
     class Meta:
         ordering = ['scheduled_date', 'priority']

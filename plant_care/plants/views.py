@@ -1,7 +1,6 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import PlantForm, RegisterForm, CareTaskForm
 from .models import Plant, CareTask, CareLog
@@ -36,8 +35,16 @@ def index(request):
 @login_required
 def dashboard(request):
     plants = Plant.objects.filter(owner=request.user)
+    tasks = CareTask.objects.filter(plant__owner=request.user)
+    overdue_watering_count = sum(1 for plant in plants if plant.is_watering_overdue())
 
-    context = {'plants': plants,}
+    context = {
+        'plants': plants,
+        'plants_count': plants.count(),
+        'pending_tasks_count': tasks.filter(is_completed=False).count(),
+        'completed_tasks_count': tasks.filter(is_completed=True).count(),
+        'overdue_watering_count': overdue_watering_count,
+    }
 
     return render(request, 'plants/dashboard.html', context)
 
@@ -103,9 +110,22 @@ def task_create(request):
 
 @login_required
 def task_list(request):
-    tasks = CareTask.objects.filter(plant__owner=request.user).order_by('is_completed', 'scheduled_date', 'priority')
+    tasks = CareTask.objects.filter(plant__owner=request.user)
 
-    return render(request, 'plants/task_list.html', {'tasks': tasks})
+    status = request.GET.get('status', 'all')
+
+    if status == 'pending':
+        tasks = tasks.filter(is_completed=False)
+
+    elif status == 'completed':
+        tasks = tasks.filter(is_completed=True)
+
+    elif status == 'overdue':
+        tasks = tasks.filter(is_completed=False, scheduled_date__lt=timezone.localdate())
+
+    tasks = tasks.order_by('is_completed', 'scheduled_date', 'priority')
+
+    return render(request, 'plants/task_list.html', {'tasks': tasks, 'status': status})
 
 
 @login_required
@@ -131,5 +151,11 @@ def task_complete(request, id):
 
     return redirect('plants:task_list')
 
+
+@login_required
+def care_history(request):
+    history = CareLog.objects.filter(plant__owner=request.user).order_by('-performed_at')
+
+    return render(request, 'plants/care_history.html', {'history': history})
 
 

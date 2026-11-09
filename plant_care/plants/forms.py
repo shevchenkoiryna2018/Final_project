@@ -1,9 +1,8 @@
 from django import forms
 from .models import Plant, CareTask
 
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm
 
 
 class PlantForm(forms.ModelForm):

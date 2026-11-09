@@ -12,6 +12,52 @@
     </a>
 </div>
 
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm text-center h-100">
+            <div class="card-body">
+                <h2 class="h5 text-muted">Мої рослини</h2>
+                <p class="display-6 fw-bold text-success mb-0">
+                    {{ plants_count }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm text-center h-100">
+            <div class="card-body">
+                <h2 class="h5 text-muted">Невиконані завдання</h2>
+                <p class="display-6 fw-bold text-warning mb-0">
+                    {{ pending_tasks_count }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm text-center h-100">
+            <div class="card-body">
+                <h2 class="h5 text-muted">Виконані завдання</h2>
+                <p class="display-6 fw-bold text-success mb-0">
+                    {{ completed_tasks_count }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm text-center h-100">
+            <div class="card-body">
+                <h2 class="h5 text-muted">Прострочені поливи</h2>
+                <p class="display-6 fw-bold text-danger mb-0">
+                    {{ overdue_watering_count }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% if plants %}
 
     <div class="row g-4">
@@ -39,6 +85,23 @@
                             <span class="text-muted">Останній полив:</span>
                             <strong class="text-end">{{ plant.last_watered|date:"d.m.Y"|default:"Не вказано" }}</strong>
                         </p>
+
+                        {% if plant.get_next_watering_date %}
+                            <p class="d-flex justify-content-between gap-3 mb-2">
+                                <span class="text-muted">Наступний полив:</span>
+                                <strong class="text-end">{{ plant.get_next_watering_date|date:"d.m.Y" }}</strong>
+                            </p>
+
+                            {% if plant.is_watering_overdue %}
+                                <div class="alert alert-danger py-2 mb-2">
+                                    Полив прострочено!
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-secondary py-2 mb-2">
+                                Дату наступного поливу неможливо визначити
+                            </div>
+                        {% endif %}
 
                         {% if plant.location %}
                             <p class="d-flex justify-content-between gap-3 mb-0">

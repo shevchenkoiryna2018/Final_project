@@ -35,6 +35,18 @@
                             Додати рослину
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'plants:task_list' %}">
+                            Мої завдання
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'plants:care_history' %}">
+                            Історія догляду
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
 

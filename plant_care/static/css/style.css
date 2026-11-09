@@ -1,0 +1,118 @@
+/* Загальні стилі */
+
+body {
+    background-color: #fafbf8;
+    color: #34483b;
+}
+
+/* Заголовки */
+
+h1, h2, h3 {
+    font-weight: 600;
+}
+
+/* Навігація */
+
+.navbar {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+/* Картки */
+
+.card {
+    border: 1px solid #e0e8df;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Кнопки */
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* Поля форм */
+
+.form-control {
+    border-radius: 8px;
+}
+
+.form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15);
+}
+
+/* Футер */
+
+footer {
+    border-top: 1px solid #e0e8df;
+}
+
+
+
+/* Головна сторінка */
+
+.hero-section {
+    background: linear-gradient(135deg, #e8f5e9, #f7fbf4);
+    border: 1px solid #dcebdd;
+    border-radius: 20px;
+}
+
+.hero-section h1 {
+    color: #176b45 !important;
+}
+
+.hero-section .lead {
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
+}
+
+/* Адаптивний заголовок головної сторінки */
+
+.hero-title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.2;
+}
+
+
+/* Картки можливостей */
+
+.hero-section + section .card {
+    background-color: #ffffff;
+}
+
+.hero-section + section .card-title {
+    margin-bottom: 1rem;
+}
+
+.hero-section + section .card-text {
+    color: #647067;
+    line-height: 1.7;
+}
+
+
+@media (max-width: 575.98px) {
+    .hero-section {
+        padding: 1.5rem 1rem !important;
+    }
+
+    .hero-section .lead {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}
+
+
+
