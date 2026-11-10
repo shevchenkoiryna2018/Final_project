@@ -12,6 +12,7 @@ class PlantForm(forms.ModelForm):
         fields = (
             'name',
             'species',
+            'image',
             'acquired_date',
             'watering_interval',
             'last_watered',
@@ -28,6 +29,7 @@ class PlantForm(forms.ModelForm):
         labels = {
             'name': 'Назва рослини',
             'species': 'Вид рослини',
+            'image': 'Фото рослини',
             'acquired_date': 'Дата придбання',
             'watering_interval': 'Інтервал поливу (днів)',
             'last_watered': 'Дата останнього поливу',
@@ -85,6 +87,14 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError('Користувач із такою електронною адресою вже зареєстрований.')
+
+        return email
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

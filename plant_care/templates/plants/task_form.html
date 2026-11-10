@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Нове завдання | PlantCare{% endblock %}
+{% block title %}
+    {% if form.instance.pk %}
+        Редагувати завдання | PlantCare
+    {% else %}
+        Нове завдання | PlantCare
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 
@@ -11,7 +17,13 @@
             <div class="card-body p-4">
 
                 <h1 class="h3 text-success mb-4">
+                    {% if form.instance.pk %}
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Редагувати завдання догляду
+                    {% else %}
+                        <i class="bi bi-calendar-plus me-2"></i>
                         Додати завдання догляду
+                    {% endif %}
                 </h1>
 
                 <form method="post">
@@ -33,14 +45,14 @@
                         </div>
                     {% endfor %}
 
-                    <div class="d-flex gap-2 mt-4">
+                    <div class="d-flex flex-wrap gap-2 mt-4">
                         <button type="submit" class="btn btn-success flex-fill">
-                            Зберегти
+                            <i class="bi bi-check-lg me-1"></i> Зберегти
                         </button>
 
-                        <a href="{% url 'plants:dashboard' %}"
+                        <a href="{% url 'plants:task_list' %}"
                             class="btn btn-outline-secondary flex-fill">
-                            Скасувати
+                            <i class="bi bi-x-lg me-1"></i> Скасувати
                         </a>
                     </div>
                 </form>

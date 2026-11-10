@@ -18,13 +18,24 @@
 
                 <h1 class="h3 text-success mb-4">
                     {% if form.instance.pk %}
+                        <i class="bi bi-pencil-square me-2"></i>
                         Редагувати рослину
                     {% else %}
+                        <i class="bi bi-flower1 me-2"></i>
                         Додати нову рослину
                     {% endif %}
                 </h1>
 
-                <form method="post">
+                {% if form.instance.pk and form.instance.image %}
+                    <div class="text-center mb-4">
+                        <img src="{{ form.instance.image.url }}"
+                             alt="{{ form.instance.name }}"
+                             class="img-fluid rounded shadow-sm"
+                             style="max-height: 220px">
+                    </div>
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {% for field in form %}
@@ -45,12 +56,12 @@
 
                     <div class="d-flex flex-wrap gap-2 mt-4">
                         <button type="submit" class="btn btn-success flex-fill">
-                            Зберегти
+                            <i class="bi bi-check-lg me-1"></i> Зберегти
                         </button>
 
                         <a href="{% url 'plants:dashboard' %}"
-                            class="btn btn-outline-secondary flex-fill">
-                            Скасувати
+                           class="btn btn-outline-secondary flex-fill">
+                            <i class="bi bi-x-lg me-1"></i> Скасувати
                         </a>
                     </div>
 

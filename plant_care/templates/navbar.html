@@ -2,7 +2,7 @@
     <div class="container">
 
         <a class="navbar-brand fw-bold" href="{% url 'plants:index' %}">
-            🌿 PlantCare
+            <i class="bi bi-flower1 me-1"></i> PlantCare
         </a>
 
         <button class="navbar-toggler" type="button"
@@ -18,32 +18,37 @@
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'plants:index' %}">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active fw-semibold{% endif %}"
+                       href="{% url 'plants:index' %}">
                         Головна
                     </a>
                 </li>
 
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'plants:dashboard' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'plant_update' or request.resolver_match.url_name == 'plant_delete' %}active fw-semibold{% endif %}"
+                           href="{% url 'plants:dashboard' %}">
                             Мої рослини
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'plants:plant_create' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'plant_create' %}active fw-semibold{% endif %}"
+                           href="{% url 'plants:plant_create' %}">
                             Додати рослину
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'plants:task_list' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'task_list' or request.resolver_match.url_name == 'task_create' or request.resolver_match.url_name == 'task_update' or request.resolver_match.url_name == 'task_delete' %}active fw-semibold{% endif %}"
+                           href="{% url 'plants:task_list' %}">
                             Мої завдання
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'plants:care_history' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'care_history' %}active fw-semibold{% endif %}"
+                           href="{% url 'plants:care_history' %}">
                             Історія догляду
                         </a>
                     </li>
@@ -54,7 +59,7 @@
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <span class="navbar-text me-lg-3">
-                            👤 {{ user.username }}
+                            <i class="bi bi-person-circle me-1"></i> {{ user.username }}
                         </span>
                     </li>
 
@@ -68,13 +73,15 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'plants:login' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active fw-semibold{% endif %}"
+                           href="{% url 'plants:login' %}">
                             Увійти
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'plants:register' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active fw-semibold{% endif %}"
+                           href="{% url 'plants:register' %}">
                             Реєстрація
                         </a>
                     </li>

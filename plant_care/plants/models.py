@@ -9,6 +9,7 @@ class Plant(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='plants', verbose_name='Власник')
     name = models.CharField(max_length=100, verbose_name='Назва рослини')
     species = models.CharField(max_length=100, verbose_name='Вид рослини')
+    image = models.ImageField(upload_to='plants/', blank=True, null=True, verbose_name='Фото рослини')
     acquired_date = models.DateField(null=True, blank=True, verbose_name='Дата придбання')
     watering_interval = models.PositiveIntegerField(validators=[MinValueValidator(1)], verbose_name='Інтервал поливу (днів)')
     last_watered = models.DateField(null=True, blank=True, verbose_name='Дата останнього поливу')

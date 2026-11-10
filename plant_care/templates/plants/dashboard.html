@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}Мої рослини | PlantCare{% endblock %}
 
 {% block content %}
@@ -8,7 +10,7 @@
     <h1 class="text-success mb-0">Мої рослини</h1>
 
     <a href="{% url 'plants:plant_create' %}" class="btn btn-success">
-        + Додати рослину
+        <i class="bi bi-plus-lg me-1"></i> Додати рослину
     </a>
 </div>
 
@@ -66,6 +68,18 @@
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm">
 
+                    {% if plant.image %}
+                        <img src="{{ plant.image.url }}"
+                             class="card-img-top"
+                             alt="{{ plant.name }}"
+                             style="height: 260px; object-fit: contain; background-color: #f8f9fa;">
+                    {% else %}
+                        <img src="{% static 'images/plant-placeholder.png' %}"
+                             class="card-img-top"
+                             alt="Зображення рослини за замовчуванням"
+                             style="height: 260px; object-fit: contain; background-color: #f8f9fa;">
+                    {% endif %}
+
                     <div class="card-body">
                         <h2 class="h4 card-title text-success mb-3">
                             {{ plant.name }}
@@ -94,12 +108,14 @@
 
                             {% if plant.is_watering_overdue %}
                                 <div class="alert alert-danger py-2 mb-2">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>
                                     Полив прострочено!
                                 </div>
                             {% endif %}
                         {% else %}
                             <div class="alert alert-secondary py-2 mb-2">
-                                Дату наступного поливу неможливо визначити
+                                <i class="bi bi-info-circle me-1"></i>
+                                Вкажіть дату останнього поливу, щоб розрахувати наступний.
                             </div>
                         {% endif %}
 
@@ -113,13 +129,13 @@
 
                     <div class="card-footer bg-white d-flex gap-2">
                         <a href="{% url 'plants:plant_update' plant.id %}"
-                            class="btn btn-outline-success btn-sm flex-fill">
-                            Редагувати
+                           class="btn btn-outline-success btn-sm flex-fill">
+                            <i class="bi bi-pencil-square me-1"></i> Редагувати
                         </a>
 
                         <a href="{% url 'plants:plant_delete' plant.id %}"
-                            class="btn btn-outline-danger btn-sm flex-fill">
-                            Видалити
+                           class="btn btn-outline-danger btn-sm flex-fill">
+                            <i class="bi bi-trash me-1"></i> Видалити
                         </a>
                     </div>
 

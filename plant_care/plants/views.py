@@ -52,7 +52,7 @@ def dashboard(request):
 @login_required
 def plant_create(request):
     if request.method == 'POST':
-        form = PlantForm(request.POST)
+        form = PlantForm(request.POST, request.FILES)
 
         if form.is_valid():
             plant = form.save(commit=False)
@@ -71,7 +71,7 @@ def plant_update(request, id):
     plant = get_object_or_404(Plant, id=id, owner=request.user)
 
     if request.method == 'POST':
-        form = PlantForm(request.POST, instance=plant)
+        form = PlantForm(request.POST, request.FILES, instance=plant)
 
         if form.is_valid():
             form.save()
@@ -101,11 +101,39 @@ def task_create(request):
 
         if form.is_valid():
             form.save()
-            return redirect('plants:dashboard')
+            return redirect('plants:task_list')
     else:
         form = CareTaskForm(user=request.user)
 
     return render(request, 'plants/task_form.html', {'form': form})
+
+
+@login_required
+def task_update(request, id):
+    task = get_object_or_404(CareTask, id=id, plant__owner=request.user, is_completed=False)
+
+    if request.method == 'POST':
+        form = CareTaskForm(request.POST, user=request.user, instance=task)
+
+        if form.is_valid():
+            form.save()
+            return redirect('plants:task_list')
+
+    else:
+        form = CareTaskForm(user=request.user, instance=task)
+
+    return render(request, 'plants/task_form.html', {'form': form})
+
+
+@login_required
+def task_delete(request, id):
+    task = get_object_or_404(CareTask, id=id, plant__owner=request.user, is_completed=False)
+
+    if request.method == 'POST':
+        task.delete()
+        return redirect('plants:task_list')
+
+    return render(request, 'plants/task_confirm_delete.html', {'task': task})
 
 
 @login_required

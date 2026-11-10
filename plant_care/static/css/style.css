@@ -63,7 +63,11 @@ footer {
 /* Головна сторінка */
 
 .hero-section {
-    background: linear-gradient(135deg, #e8f5e9, #f7fbf4);
+    background-image: url("/static/images/hero-botanical.png") !important;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
     border: 1px solid #dcebdd;
     border-radius: 20px;
 }
@@ -111,6 +115,21 @@ footer {
     .hero-section .lead {
         font-size: 1rem;
         line-height: 1.6;
+    }
+}
+
+/* Ботанічний фон на планшетах і телефонах */
+@media (max-width: 991.98px) {
+    .hero-section {
+        background-image:
+            linear-gradient(
+                rgba(250, 251, 248, 0.45),
+                rgba(250, 251, 248, 0.45)
+            ),
+            url("../images/hero-botanical.png") !important;
+
+        background-position: center;
+        background-size: cover;
     }
 }
 

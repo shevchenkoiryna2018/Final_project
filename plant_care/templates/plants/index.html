@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}Головна | PlantCare{% endblock %}
 
 {% block content %}
 
 <section class="hero-section text-center p-4 p-md-5 mb-4">
     <h1 class="hero-title fw-bold text-success mb-4">
-        🌿 Ласкаво просимо до PlantCare!
+        <i class="bi bi-flower1 me-2"></i> Ласкаво просимо до PlantCare!
     </h1>
 
     <p class="lead text-muted mb-4">
@@ -20,13 +22,15 @@
             Мої рослини
         </a>
     {% else %}
-        <a href="{% url 'plants:register' %}" class="btn btn-success btn-lg">
-            Почати користуватися
-        </a>
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+            <a href="{% url 'plants:register' %}" class="btn btn-success btn-lg">
+                Почати користуватися
+            </a>
 
-        <a href="{% url 'plants:login' %}" class="btn btn-outline-success btn-lg ms-2">
-            Увійти
-        </a>
+            <a href="{% url 'plants:login' %}" class="btn btn-outline-success btn-lg">
+                Увійти
+            </a>
+        </div>
     {% endif %}
 </section>
 
@@ -37,8 +41,11 @@
         <div class="col-12 col-md-4">
             <div class="card h-100 shadow-sm text-center">
                 <div class="card-body p-4">
+                    <div class="text-success mb-3">
+                        <i class="bi bi-flower1 display-5"></i>
+                    </div>
                     <h3 class="h5 card-title text-success fw-semibold">
-                        🪴 Колекція рослин
+                        Колекція рослин
                     </h3>
                     <p class="card-text">
                         Додавайте свої рослини, зберігайте інформацію
@@ -51,8 +58,11 @@
         <div class="col-12 col-md-4">
             <div class="card h-100 shadow-sm text-center">
                 <div class="card-body p-4">
+                    <div class="text-success mb-3">
+                        <i class="bi bi-calendar-check display-5"></i>
+                    </div>
                     <h3 class="h5 card-title text-success fw-semibold">
-                        📅 Планування догляду
+                        Планування догляду
                     </h3>
                     <p class="card-text">
                         Створюйте завдання для поливу, підживлення,
@@ -65,8 +75,11 @@
         <div class="col-12 col-md-4">
             <div class="card h-100 shadow-sm text-center">
                 <div class="card-body p-4">
+                    <div class="text-success mb-3">
+                        <i class="bi bi-journal-check display-5"></i>
+                    </div>
                     <h3 class="h5 card-title text-success fw-semibold">
-                        📖 Історія догляду
+                        Історія догляду
                     </h3>
                     <p class="card-text">
                         Відстежуйте виконані завдання та переглядайте
@@ -77,6 +90,24 @@
         </div>
 
     </div>
+</section>
+
+<section class="text-center py-4 mt-4">
+
+    <h2 class="h3 text-success mb-3">
+        Нехай ваші рослини зростають разом із турботою!
+    </h2>
+
+    <p class="text-muted mb-4">
+        PlantCare допоможе не забувати про важливі моменти
+        догляду та зберігати історію ваших зелених улюбленців.
+    </p>
+
+    <img src="{% static 'images/plants-decoration.png' %}"
+         alt="Ілюстрація кімнатних рослин"
+         class="img-fluid rounded"
+         style="max-width: 650px; width: 100%;">
+
 </section>
 
 {% endblock %}
