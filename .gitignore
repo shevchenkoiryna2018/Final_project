@@ -20,3 +20,6 @@ desktop.ini
 
 # Uploaded images
 media/
+
+# Collected static files
+staticfiles/

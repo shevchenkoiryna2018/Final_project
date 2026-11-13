@@ -61,12 +61,18 @@ footer {
 
 
 /* Головна сторінка */
-
 .hero-section {
-    background-image: url("/static/images/hero-botanical.png") !important;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-image:
+        linear-gradient(
+            rgba(250, 251, 248, 0.65),
+            rgba(250, 251, 248, 0.65)
+        ),
+        url("../images/hero-botanical.png");
+
+    background-position: center, center;
+    background-size: cover, cover;
+    background-repeat: no-repeat, no-repeat;
+    background-color: #fafbf8;
 
     border: 1px solid #dcebdd;
     border-radius: 20px;
@@ -119,19 +125,37 @@ footer {
 }
 
 /* Ботанічний фон на планшетах і телефонах */
-@media (max-width: 991.98px) {
+@media (min-width: 576px) and (max-width: 991.98px) {
     .hero-section {
         background-image:
             linear-gradient(
-                rgba(250, 251, 248, 0.45),
-                rgba(250, 251, 248, 0.45)
+                rgba(250, 251, 248, 0.65),
+                rgba(250, 251, 248, 0.65)
             ),
-            url("../images/hero-botanical.png") !important;
+            url("../images/hero-botanical.png");
 
-        background-position: center;
-        background-size: cover;
+        background-size: cover, cover;
+        background-position: center, center;
     }
 }
 
+/* Ботанічний фон на телефонах */
+@media (max-width: 575.98px) {
+    .hero-section {
+        background-image:
+            linear-gradient(
+                rgba(250, 251, 248, 0.65),
+                rgba(250, 251, 248, 0.65)
+            ),
+            url("../images/hero-botanical-mobile.png");
 
+        background-size: cover, cover;
+        background-position: center, center;
+        padding: 1.5rem 1rem !important;
+    }
 
+    .hero-section .lead {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}

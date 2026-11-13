@@ -38,12 +38,24 @@ def dashboard(request):
     tasks = CareTask.objects.filter(plant__owner=request.user)
     overdue_watering_count = sum(1 for plant in plants if plant.is_watering_overdue())
 
+    search_query = request.GET.get('q', '').strip()
+    if search_query:
+        query = search_query.casefold()
+
+        filtered_plants = [
+            plant for plant in plants
+            if query in plant.name.casefold() or query in plant.species.casefold()
+        ]
+    else:
+        filtered_plants = plants
+
     context = {
-        'plants': plants,
+        'plants': filtered_plants,
         'plants_count': plants.count(),
         'pending_tasks_count': tasks.filter(is_completed=False).count(),
         'completed_tasks_count': tasks.filter(is_completed=True).count(),
         'overdue_watering_count': overdue_watering_count,
+        'search_query': search_query,
     }
 
     return render(request, 'plants/dashboard.html', context)

@@ -1,0 +1,102 @@
+/* PlantCare — спільні кольори */
+:root {
+    --primary: #198754;
+    --secondary: #176b45;
+    --header-bg: #198754;
+    --header-color: #ffffff;
+    --header-link-color: #ffffff;
+    --button-bg: #198754;
+    --button-hover-bg: #176b45;
+    --default-button-bg: #198754;
+    --default-button-hover-bg: #176b45;
+}
+
+/* Світла тема */
+html[data-theme="light"] {
+    --link-fg: #176b45;
+    --link-hover-color: #125735;
+    --body-bg: #f8faf8;
+    --body-fg: #26382d;
+    --darkened-bg: #edf4ee;
+    --selected-bg: #e1f0e5;
+    --selected-row: #e8f4ea;
+    --breadcrumbs-bg: #e8f3eb;
+    --breadcrumbs-fg: #34483b;
+    --breadcrumbs-link-fg: #176b45;
+}
+
+/* Темна тема */
+html[data-theme="dark"] {
+    --link-fg: #8bd9ac;
+    --link-hover-color: #b6f0cb;
+    --body-bg: #171d19;
+    --body-fg: #edf5ef;
+    --darkened-bg: #242d27;
+    --selected-bg: #304638;
+    --selected-row: #2a3a30;
+    --breadcrumbs-bg: #263d2f;
+    --breadcrumbs-fg: #edf5ef;
+    --breadcrumbs-link-fg: #b6f0cb;
+}
+
+/* Шапка PlantCare */
+#header {
+    background-color: #198754;
+    color: #ffffff;
+}
+
+/* Біла назва та іконка */
+#site-name a,
+#site-name a:link,
+#site-name a:visited {
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+#site-name a:hover {
+    color: #e8f3eb;
+}
+
+#site-name .bi {
+    margin-right: 8px;
+}
+
+/* Посилання у шапці */
+#user-tools,
+#user-tools a,
+#user-tools a:link,
+#user-tools a:visited {
+    color: #ffffff;
+}
+
+/* Заголовки блоків */
+.module caption,
+.module h2 {
+    background-color: #198754;
+    color: #ffffff;
+}
+
+/* Заокруглення блоків */
+.module {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Кнопки */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input {
+    border-radius: 8px;
+}
+
+/* Кнопки збереження PlantCare */
+.submit-row input[type="submit"] {
+    background-color: #198754;
+    color: #ffffff;
+}
+
+.submit-row input[type="submit"]:hover {
+    background-color: #176b45;
+}

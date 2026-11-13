@@ -6,7 +6,7 @@ from .models import Plant, CareTask, CareLog
 class PlantAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'species', 'owner', 'watering_interval', 'last_watered']
     list_filter = ['species', 'owner']
-    search_fields = ['name', 'species', 'owner_username']
+    search_fields = ['name', 'species', 'owner__username']
     ordering = ('name',)
     list_per_page = 10
 
@@ -28,3 +28,7 @@ class CareLogAdmin(admin.ModelAdmin):
     ordering = ('-performed_at',)
     list_per_page = 10
 
+
+admin.site.site_header = "PlantCare — Адміністрування"
+admin.site.site_title = "PlantCare Admin"
+admin.site.index_title = "Панель керування PlantCare"
