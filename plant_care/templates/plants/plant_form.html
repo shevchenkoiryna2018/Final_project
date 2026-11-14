@@ -46,6 +46,15 @@
 
                             {{ field }}
 
+                            {% if field.name == 'image' %}
+                                <button type="button"
+                                        id="clear-image-btn"
+                                        class="btn btn-outline-danger btn-sm mt-2 d-none">
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Прибрати фото
+                                </button>
+                            {% endif %}
+
                             {% if field.errors %}
                                 <div class="text-danger small mt-1">
                                     {{ field.errors }}
@@ -72,5 +81,32 @@
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const imageInput = document.querySelector('input[type="file"][name="image"]');
+        const clearButton = document.getElementById('clear-image-btn');
+
+        if (!imageInput || !clearButton) {
+            return;
+        }
+
+        function updateClearButton() {
+            clearButton.classList.toggle(
+                'd-none',
+                imageInput.files.length === 0
+            );
+        }
+
+        imageInput.addEventListener('change', updateClearButton);
+
+        clearButton.addEventListener('click', function () {
+            imageInput.value = '';
+            updateClearButton();
+        });
+
+        updateClearButton();
+    });
+</script>
 
 {% endblock %}

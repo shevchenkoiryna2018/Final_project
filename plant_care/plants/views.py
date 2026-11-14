@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -20,6 +21,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, 'Обліковий запис успішно створено! Ласкаво просимо до PlantCare!')
             return redirect('plants:dashboard')
 
     else:
@@ -55,6 +57,7 @@ def dashboard(request):
         'pending_tasks_count': tasks.filter(is_completed=False).count(),
         'completed_tasks_count': tasks.filter(is_completed=True).count(),
         'overdue_watering_count': overdue_watering_count,
+        'overdue_tasks_count': tasks.filter(is_completed=False, scheduled_date__lt=timezone.localdate()).count(),
         'search_query': search_query,
     }
 
@@ -70,6 +73,7 @@ def plant_create(request):
             plant = form.save(commit=False)
             plant.owner = request.user
             plant.save()
+            messages.success(request, 'Рослину успішно додано!')
             return redirect('plants:dashboard')
 
     else:
@@ -87,6 +91,7 @@ def plant_update(request, id):
 
         if form.is_valid():
             form.save()
+            messages.success(request, 'Зміни успішно збережено!')
             return redirect('plants:dashboard')
 
     else:
@@ -101,6 +106,7 @@ def plant_delete(request, id):
 
     if request.method == 'POST':
         plant.delete()
+        messages.success(request, 'Рослину успішно видалено!')
         return redirect('plants:dashboard')
 
     return render(request, 'plants/plant_confirm_delete.html', {'plant': plant})
@@ -113,6 +119,7 @@ def task_create(request):
 
         if form.is_valid():
             form.save()
+            messages.success(request, 'Завдання успішно створено!')
             return redirect('plants:task_list')
     else:
         form = CareTaskForm(user=request.user)
@@ -129,6 +136,7 @@ def task_update(request, id):
 
         if form.is_valid():
             form.save()
+            messages.success(request, 'Завдання успішно оновлено!')
             return redirect('plants:task_list')
 
     else:
@@ -143,6 +151,7 @@ def task_delete(request, id):
 
     if request.method == 'POST':
         task.delete()
+        messages.success(request, 'Завдання успішно видалено!')
         return redirect('plants:task_list')
 
     return render(request, 'plants/task_confirm_delete.html', {'task': task})
@@ -188,6 +197,8 @@ def task_complete(request, id):
             if task.task_type == 'watering':
                 task.plant.last_watered = timezone.localdate()
                 task.plant.save()
+
+        messages.success(request, 'Завдання виконано! Запис додано до історії догляду.')
 
     return redirect('plants:task_list')
 

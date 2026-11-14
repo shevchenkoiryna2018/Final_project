@@ -5,6 +5,9 @@
     --header-bg: #198754;
     --header-color: #ffffff;
     --header-link-color: #ffffff;
+    --breadcrumbs-bg: #e8f3eb;
+    --breadcrumbs-fg: #34483b;
+    --breadcrumbs-link-fg: #176b45;
     --button-bg: #198754;
     --button-hover-bg: #176b45;
     --default-button-bg: #198754;
@@ -43,6 +46,22 @@ html[data-theme="dark"] {
 #header {
     background-color: #198754;
     color: #ffffff;
+}
+
+/* Навігаційний рядок під шапкою */
+ol.breadcrumbs {
+    background: var(--breadcrumbs-bg);
+    color: var(--breadcrumbs-fg);
+}
+
+ol.breadcrumbs a,
+ol.breadcrumbs a:link,
+ol.breadcrumbs a:visited {
+    color: var(--breadcrumbs-link-fg);
+}
+
+ol.breadcrumbs a:hover {
+    text-decoration: underline;
 }
 
 /* Біла назва та іконка */
@@ -99,4 +118,13 @@ input[type="button"],
 
 .submit-row input[type="submit"]:hover {
     background-color: #176b45;
+}
+
+/* Автоматична тема — відповідно до налаштувань системи */
+@media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]):not([data-theme="dark"]) {
+        --breadcrumbs-bg: #263d2f;
+        --breadcrumbs-fg: #edf5ef;
+        --breadcrumbs-link-fg: #b6f0cb;
+    }
 }

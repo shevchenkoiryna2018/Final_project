@@ -30,57 +30,112 @@
         {% if search_query %}
             <a href="{% url 'plants:dashboard' %}"
                 class="btn btn-outline-secondary">
-                <i class="bi bi-[-lg me-1"></i> Очистити
+                <i class="bi bi-x-lg me-1"></i> Очистити
             </a>
         {% endif %}
     </div>
 </form>
 
-<div class="row g-3 mb-4">
-    <div class="col-12 col-md-6 col-lg-3">
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-5 g-3 mb-4">
+
+    <div class="col">
         <div class="card shadow-sm text-center h-100">
             <div class="card-body">
-                <h2 class="h5 text-muted">Мої рослини</h2>
+                <h2 class="h6 text-muted">
+                    Мої рослини
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                       data-bs-toggle="tooltip"
+                       title="Загальна кількість рослин у вашій колекції."></i>
+                </h2>
                 <p class="display-6 fw-bold text-success mb-0">
                     {{ plants_count }}
                 </p>
+                <p class="small text-muted mt-2 mb-0 d-md-none">
+                    Загальна кількість рослин у вашій колекції.
+                </p>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-lg-3">
+    <div class="col">
         <div class="card shadow-sm text-center h-100">
             <div class="card-body">
-                <h2 class="h5 text-muted">Невиконані завдання</h2>
+                <h2 class="h6 text-muted">
+                    Невиконані завдання
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                       data-bs-toggle="tooltip"
+                       title="Усі завдання, які ще не виконані, включно з простроченими."></i>
+                </h2>
                 <p class="display-6 fw-bold text-warning mb-0">
                     {{ pending_tasks_count }}
                 </p>
+                <p class="small text-muted mt-2 mb-0 d-md-none">
+                    Усі невиконані завдання, включно з простроченими.
+                </p>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-lg-3">
+    <div class="col">
         <div class="card shadow-sm text-center h-100">
             <div class="card-body">
-                <h2 class="h5 text-muted">Виконані завдання</h2>
+                <h2 class="h6 text-muted">
+                    Виконані завдання
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                       data-bs-toggle="tooltip"
+                       title="Загальна кількість завершених завдань із догляду."></i>
+                </h2>
                 <p class="display-6 fw-bold text-success mb-0">
                     {{ completed_tasks_count }}
                 </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-md-6 col-lg-3">
-        <div class="card shadow-sm text-center h-100">
-            <div class="card-body">
-                <h2 class="h5 text-muted">Прострочені поливи</h2>
-                <p class="display-6 fw-bold text-danger mb-0">
-                    {{ overdue_watering_count }}
+                <p class="small text-muted mt-2 mb-0 d-md-none">
+                    Усі завершені завдання з догляду.
                 </p>
             </div>
         </div>
     </div>
+
+    <div class="col">
+        <div class="card shadow-sm text-center h-100">
+            <div class="card-body">
+                <h2 class="h6 text-muted">
+                    Прострочені завдання
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                       data-bs-toggle="tooltip"
+                       title="Невиконані завдання, запланована дата яких уже минула."></i>
+                </h2>
+                <p class="display-6 fw-bold text-danger mb-0">
+                    {{ overdue_tasks_count }}
+                </p>
+                <p class="small text-muted mt-2 mb-0 d-md-none">
+                    Невиконані завдання, запланована дата яких уже минула.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card shadow-sm text-center h-100">
+            <div class="card-body">
+                <h2 class="h6 text-muted">
+                    Прострочені поливи
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                       data-bs-toggle="tooltip"
+                       title="Кількість рослин, для яких минула дата наступного поливу за індивідуальним графіком."></i>
+                </h2>
+                <p class="display-6 fw-bold text-danger mb-0">
+                    {{ overdue_watering_count }}
+                </p>
+                <p class="small text-muted mt-2 mb-0 d-md-none">
+                    Рослини, для яких минула дата наступного поливу за графіком.
+                </p>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 
 {% if plants %}
 
@@ -208,6 +263,30 @@
     {% endif %}
 
 {% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltipElements = document.querySelectorAll(
+            '[data-bs-toggle="tooltip"]'
+        );
+
+        const tooltips = [];
+
+        tooltipElements.forEach(function (element) {
+            const tooltip = new bootstrap.Tooltip(element, {
+                container: 'body'
+            });
+
+            tooltips.push(tooltip);
+        });
+
+        window.addEventListener('resize', function () {
+            tooltips.forEach(function (tooltip) {
+                tooltip.hide();
+            });
+        });
+    });
+</script>
 
 {% endblock %}
 
