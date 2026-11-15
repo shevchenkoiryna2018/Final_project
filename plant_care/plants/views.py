@@ -41,6 +41,8 @@ def dashboard(request):
     overdue_watering_count = sum(1 for plant in plants if plant.is_watering_overdue())
 
     search_query = request.GET.get('q', '').strip()
+    watering_filter = request.GET.get('watering', 'all')
+    sort_by = request.GET.get('sort', 'name_asc')
     if search_query:
         query = search_query.casefold()
 
@@ -51,6 +53,47 @@ def dashboard(request):
     else:
         filtered_plants = plants
 
+    if watering_filter == 'overdue':
+        filtered_plants = [
+            plant for plant in filtered_plants
+            if plant.is_watering_overdue()
+        ]
+
+    if sort_by == 'name_desc':
+        filtered_plants = sorted(
+            filtered_plants,
+            key=lambda plant: plant.name.casefold(),
+            reverse=True
+        )
+
+    elif sort_by == 'newest':
+        filtered_plants = sorted(
+            filtered_plants,
+            key=lambda plant: plant.created_at,
+            reverse=True
+        )
+
+    elif sort_by == 'oldest':
+        filtered_plants = sorted(
+            filtered_plants,
+            key=lambda plant: plant.created_at
+        )
+
+    elif sort_by == 'watering':
+        filtered_plants = sorted(
+            filtered_plants,
+            key=lambda plant: (
+                plant.get_next_watering_date() is None,
+                plant.get_next_watering_date()
+            )
+        )
+
+    else:
+        filtered_plants = sorted(
+            filtered_plants,
+            key=lambda plant: plant.name.casefold()
+        )
+
     context = {
         'plants': filtered_plants,
         'plants_count': plants.count(),
@@ -59,6 +102,8 @@ def dashboard(request):
         'overdue_watering_count': overdue_watering_count,
         'overdue_tasks_count': tasks.filter(is_completed=False, scheduled_date__lt=timezone.localdate()).count(),
         'search_query': search_query,
+        'watering_filter': watering_filter,
+        'sort_by': sort_by,
     }
 
     return render(request, 'plants/dashboard.html', context)

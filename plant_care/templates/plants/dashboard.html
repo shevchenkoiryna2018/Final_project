@@ -15,6 +15,13 @@
 </div>
 
 <form method="get" class="mb-4">
+
+    {% if watering_filter == 'overdue' %}
+        <input type="hidden" name="watering" value="overdue">
+    {% endif %}
+
+    <input type="hidden" name="sort" value="{{ sort_by }}">
+
     <div class="input-group">
         <input type="search"
                 name="q"
@@ -28,7 +35,7 @@
         </button>
 
         {% if search_query %}
-            <a href="{% url 'plants:dashboard' %}"
+            <a href="{% url 'plants:dashboard' %}?sort={{ sort_by }}{% if watering_filter == 'overdue' %}&amp;watering=overdue{% endif %}"
                 class="btn btn-outline-secondary">
                 <i class="bi bi-x-lg me-1"></i> Очистити
             </a>
@@ -44,7 +51,7 @@
             <div class="card-body">
                 <h2 class="h6 text-muted">
                     Мої рослини
-                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block position-relative z-2"
                        data-bs-toggle="tooltip"
                        title="Загальна кількість рослин у вашій колекції."></i>
                 </h2>
@@ -54,6 +61,10 @@
                 <p class="small text-muted mt-2 mb-0 d-md-none">
                     Загальна кількість рослин у вашій колекції.
                 </p>
+
+                <a href="{% url 'plants:dashboard' %}?sort={{ sort_by }}"
+                    class="stretched-link"
+                    aria-label="Показати всі рослини"></a>
             </div>
         </div>
     </div>
@@ -63,7 +74,7 @@
             <div class="card-body">
                 <h2 class="h6 text-muted">
                     Невиконані завдання
-                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block position-relative z-2"
                        data-bs-toggle="tooltip"
                        title="Усі завдання, які ще не виконані, включно з простроченими."></i>
                 </h2>
@@ -73,6 +84,10 @@
                 <p class="small text-muted mt-2 mb-0 d-md-none">
                     Усі невиконані завдання, включно з простроченими.
                 </p>
+
+                <a href="{% url 'plants:task_list' %}?status=pending"
+                    class="stretched-link"
+                    aria-label="Показати невиконані завдання"></a>
             </div>
         </div>
     </div>
@@ -82,7 +97,7 @@
             <div class="card-body">
                 <h2 class="h6 text-muted">
                     Виконані завдання
-                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block position-relative z-2"
                        data-bs-toggle="tooltip"
                        title="Загальна кількість завершених завдань із догляду."></i>
                 </h2>
@@ -92,6 +107,10 @@
                 <p class="small text-muted mt-2 mb-0 d-md-none">
                     Усі завершені завдання з догляду.
                 </p>
+
+                <a href="{% url 'plants:task_list' %}?status=completed"
+                    class="stretched-link"
+                    aria-label="Показати виконані завдання"></a>
             </div>
         </div>
     </div>
@@ -101,7 +120,7 @@
             <div class="card-body">
                 <h2 class="h6 text-muted">
                     Прострочені завдання
-                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block position-relative z-2"
                        data-bs-toggle="tooltip"
                        title="Невиконані завдання, запланована дата яких уже минула."></i>
                 </h2>
@@ -111,6 +130,10 @@
                 <p class="small text-muted mt-2 mb-0 d-md-none">
                     Невиконані завдання, запланована дата яких уже минула.
                 </p>
+
+                <a href="{% url 'plants:task_list' %}?status=overdue"
+                    class="stretched-link"
+                    aria-label="Показати прострочені завдання"></a>
             </div>
         </div>
     </div>
@@ -120,7 +143,7 @@
             <div class="card-body">
                 <h2 class="h6 text-muted">
                     Прострочені поливи
-                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block"
+                    <i class="bi bi-info-circle ms-1 d-none d-md-inline-block position-relative z-2"
                        data-bs-toggle="tooltip"
                        title="Кількість рослин, для яких минула дата наступного поливу за індивідуальним графіком."></i>
                 </h2>
@@ -130,12 +153,80 @@
                 <p class="small text-muted mt-2 mb-0 d-md-none">
                     Рослини, для яких минула дата наступного поливу за графіком.
                 </p>
+
+                <a href="{% url 'plants:dashboard' %}?watering=overdue&amp;sort={{ sort_by }}"
+                    class="stretched-link"
+                    aria-label="Показати рослини з простроченим поливом"></a>
             </div>
         </div>
     </div>
 
 </div>
 
+<form method="get" class="mb-4">
+
+    {% if search_query %}
+        <input type="hidden" name="q" value="{{ search_query }}">
+    {% endif %}
+
+    {% if watering_filter == 'overdue' %}
+        <input type="hidden" name="watering" value="overdue">
+    {% endif %}
+
+    <div class="d-flex flex-column flex-md-row justify-content-md-end align-items-md-center gap-2">
+
+        <label for="sort" class="text-muted">
+            <i class="bi bi-arrow-down-up me-1"></i>
+            Сортувати за:
+        </label>
+
+        <select name="sort"
+                id="sort"
+                class="form-select w-auto"
+                onchange="this.form.submit()">
+
+            <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>
+                За назвою (А-Я)
+            </option>
+
+            <option value="name_desc" {% if sort_by == 'name_desc' %}selected{% endif %}>
+                За назвою (Я-А)
+            </option>
+
+            <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>
+                За датою додавання (новіші)
+            </option>
+
+            <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>
+                За датою додавання (старіші)
+            </option>
+
+            <option value="watering" {% if sort_by == 'watering' %}selected{% endif %}>
+                За датою наступного поливу
+            </option>
+
+        </select>
+    </div>
+
+    <p class="small text-muted text-md-end mt-2 mb-0">
+        <i class="bi bi-info-circle me-1"></i>
+        Враховується дата додавання рослини до колекції в PlantCare, а не дата придбання.
+    </p>
+</form>
+
+{% if watering_filter == 'overdue' %}
+    <div class="alert alert-info d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4">
+        <span>
+            <i class="bi bi-funnel me-1"></i>
+            <strong>Активний фільтр:</strong> Прострочені поливи
+        </span>
+
+        <a href="{% url 'plants:dashboard' %}?sort={{ sort_by }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}"
+            class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-x-lg me-1"></i> Скинути фільтр
+        </a>
+    </div>
+{% endif %}
 
 {% if plants %}
 
@@ -182,19 +273,42 @@
                                 <span class="text-muted">Наступний полив:</span>
                                 <strong class="text-end">{{ plant.get_next_watering_date|date:"d.m.Y" }}</strong>
                             </p>
+                        {% endif %}
 
-                            {% if plant.is_watering_overdue %}
+                        {% with status=plant.get_watering_status %}
+
+                            {% if status == 'overdue' %}
                                 <div class="alert alert-danger py-2 mb-2">
                                     <i class="bi bi-exclamation-triangle me-1"></i>
                                     Полив прострочено!
                                 </div>
+
+                            {% elif status == 'today' %}
+                                <div class="alert alert-warning py-2 mb-2">
+                                    <i class="bi bi-droplet me-1"></i>
+                                    Потрібно полити сьогодні!
+                                </div>
+
+                            {% elif status == 'tomorrow' %}
+                                <div class="alert alert-info py-2 mb-2">
+                                    <i class="bi bi-calendar-event me-1"></i>
+                                    Наступний полив завтра.
+                                </div>
+
+                            {% elif status == 'on_schedule' %}
+                                <div class="alert alert-success py-2 mb-2">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Полив за графіком.
+                                </div>
+
+                            {% else %}
+                                <div class="alert alert-secondary py-2 mb-2">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Вкажіть дату останнього поливу, щоб розрахувати наступний.
+                                </div>
                             {% endif %}
-                        {% else %}
-                            <div class="alert alert-secondary py-2 mb-2">
-                                <i class="bi bi-info-circle me-1"></i>
-                                Вкажіть дату останнього поливу, щоб розрахувати наступний.
-                            </div>
-                        {% endif %}
+
+                        {% endwith %}
 
                         {% if plant.location %}
                             <p class="d-flex justify-content-between gap-3 mb-0">
@@ -202,6 +316,13 @@
                                 <strong class="text-end">{{ plant.location }}</strong>
                             </p>
                         {% endif %}
+
+                        <hr class="my-3">
+
+                        <p class="small text-muted mb-0">
+                            <i class="bi bi-calendar-plus me-1"></i>
+                            Додано до колекції: {{ plant.created_at|date:"d.m.Y" }}
+                        </p>
                     </div>
 
                     <div class="card-footer bg-white d-flex gap-2">
@@ -224,7 +345,32 @@
 
 {% else %}
 
-    {% if search_query %}
+    {% if watering_filter == 'overdue' and search_query %}
+
+        <div class="text-center py-5">
+            <h2 class="h4 text-muted mb-3">
+                За вашим запитом рослин із простроченим поливом не знайдено
+            </h2>
+
+            <p class="text-muted mb-4">
+                Спробуйте змінити пошуковий запит або скинути фільтр.
+            </p>
+        </div>
+
+    {% elif watering_filter == 'overdue' %}
+
+        <div class="text-center py-5">
+            <h2 class="h4 text-success mb-3">
+                <i class="bi bi-check-circle me-1"></i>
+                У вас немає рослин із простроченим поливом
+            </h2>
+
+            <p class="text-muted mb-4">
+                Жодна рослина наразі не має простроченого поливу за визначеним графіком.
+            </p>
+        </div>
+
+    {% elif search_query %}
 
         <div class="text-center py-5">
             <h2 class="h4 text-muted mb-3">
@@ -235,15 +381,13 @@
                 Спробуйте змінити пошуковий запит.
             </p>
 
-            <a href="{% url 'plants:dashboard' %}"
+            <a href="{% url 'plants:dashboard' %}?sort={{ sort_by }}"
                 class="btn btn-outline-success">
                 Показати всі рослини
             </a>
         </div>
 
     {% else %}
-
-
 
         <div class="text-center py-5">
             <h2 class="h4 text-muted mb-3">

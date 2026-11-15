@@ -34,6 +34,25 @@ class Plant(models.Model):
 
         return False
 
+    def get_watering_status(self):
+        next_date = self.get_next_watering_date()
+        today = timezone.localdate()
+
+        if next_date is None:
+            return 'unknown'
+
+        if next_date < today:
+            return 'overdue'
+
+        elif next_date == today:
+            return 'today'
+
+        elif next_date == today + timedelta(days=1):
+            return 'tomorrow'
+
+        else:
+            return 'on_schedule'
+
     class Meta:
         ordering = ['name']
         verbose_name = 'Рослина'
